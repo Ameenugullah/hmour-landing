@@ -1,0 +1,124 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html {
+  scroll-behavior: smooth;
+  scrollbar-width: auto;
+  scrollbar-color: #9a6b2b #f1ebe0;
+}
+
+/* custom scrollbar — thicker track, amber thumb on parchment */
+::-webkit-scrollbar {
+  width: 16px;
+}
+::-webkit-scrollbar-track {
+  background: #f1ebe0;
+}
+::-webkit-scrollbar-thumb {
+  background-color: #9a6b2b;
+  border-radius: 9999px;
+  border: 3px solid #f1ebe0;
+}
+::-webkit-scrollbar-thumb:hover {
+  background-color: #7c531e;
+}
+
+body {
+  @apply bg-parchment text-ink font-serif antialiased;
+  font-optical-sizing: auto;
+}
+
+::selection {
+  background: #9a6b2b;
+  color: #f1ebe0;
+}
+
+/* ---------- scroll reveal ---------- */
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.9s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: opacity, transform;
+}
+.reveal.is-visible {
+  opacity: 1;
+  transform: none;
+}
+/* stagger helpers — add on children next to .reveal */
+.reveal-delay-1 { transition-delay: 0.12s; }
+.reveal-delay-2 { transition-delay: 0.24s; }
+.reveal-delay-3 { transition-delay: 0.36s; }
+
+/* ---------- floating hero gallery ---------- */
+@keyframes drift-slow {
+  0%, 100% { transform: translateY(0) rotate(-1.2deg); }
+  50% { transform: translateY(-14px) rotate(-1.2deg); }
+}
+@keyframes drift-slower {
+  0%, 100% { transform: translateY(0) rotate(1.6deg); }
+  50% { transform: translateY(-9px) rotate(1.6deg); }
+}
+.drift-a { animation: drift-slow 9s ease-in-out infinite; }
+.drift-b { animation: drift-slower 12s ease-in-out infinite; }
+
+/* ---------- ticker marquee ---------- */
+@keyframes ticker-scroll {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+.ticker-track {
+  animation: ticker-scroll 28s linear infinite;
+}
+
+/* underline that grows from the left on hover — used in nav + footer */
+.link-line {
+  position: relative;
+}
+.link-line::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -4px;
+  height: 1px;
+  width: 100%;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.link-line:hover::after,
+.link-line:focus-visible::after {
+  transform: scaleX(1);
+}
+
+/* thin editorial rule */
+.rule {
+  @apply h-px w-full bg-ink/15;
+}
+
+/* image zoom on hover, kept subtle */
+.img-zoom img {
+  transition: transform 1.2s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.img-zoom:hover img {
+  transform: scale(1.045);
+}
+
+/* keyboard focus should always be visible */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible {
+  outline: 1px solid #9a6b2b;
+  outline-offset: 3px;
+}
+
+/* respect users who don't want motion */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .reveal { opacity: 1; transform: none; transition: none; }
+  .drift-a, .drift-b { animation: none; }
+  .img-zoom img { transition: none; }
+  .ticker-track { animation: none; }
+}
